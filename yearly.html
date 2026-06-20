@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BAKAL BUDDIES - Yearly Heatmap</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Montserrat:wght@600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+        }
+        .mini-cell {
+            aspect-ratio: 1 / 1;
+            border-radius: 2px;
+        }
+        .heat-done {
+            background-color: #84cc16;
+        }
+        .heat-missed {
+            background-color: rgba(255, 180, 171, 0.35);
+        }
+        .heat-future {
+            background-color: #1c2438;
+        }
+        .heat-pad {
+            background-color: transparent;
+        }
+        /* Custom scrollbar for a cleaner gym look */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b1326;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3449;
+            border-radius: 10px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+        }
+    </style>
+<!-- Tailwind Theme Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#171f33",
+                    "on-secondary-container": "#00374d",
+                    "on-surface-variant": "#c1cab0",
+                    "tertiary-fixed-dim": "#ffb2b7",
+                    "secondary": "#7bd0ff",
+                    "on-tertiary": "#67001b",
+                    "surface-bright": "#31394d",
+                    "primary-container": "#84cc16",
+                    "background": "#0b1326",
+                    "primary-fixed": "#acf847",
+                    "on-primary": "#1f3700",
+                    "surface-container-lowest": "#060e20",
+                    "on-background": "#dae2fd",
+                    "on-primary-fixed": "#102000",
+                    "surface-container-highest": "#2d3449",
+                    "outline": "#8b947d",
+                    "primary-fixed-dim": "#91db2a",
+                    "on-tertiary-fixed-variant": "#92002a",
+                    "on-error": "#690005",
+                    "secondary-container": "#00a6e0",
+                    "tertiary-container": "#ff9da4",
+                    "surface-tint": "#91db2a",
+                    "tertiary": "#ffc6c8",
+                    "inverse-surface": "#dae2fd",
+                    "outline-variant": "#424936",
+                    "inverse-primary": "#416900",
+                    "surface-container-high": "#222a3d",
+                    "on-surface": "#dae2fd",
+                    "surface-container-low": "#131b2e",
+                    "on-secondary": "#00354a",
+                    "on-tertiary-fixed": "#40000d",
+                    "primary": "#9ee939",
+                    "surface-dim": "#0b1326",
+                    "secondary-fixed": "#c4e7ff",
+                    "inverse-on-surface": "#283044",
+                    "on-secondary-fixed-variant": "#004c69",
+                    "on-primary-container": "#315200",
+                    "on-secondary-fixed": "#001e2c",
+                    "error": "#ffb4ab",
+                    "tertiary-fixed": "#ffdadb",
+                    "on-tertiary-container": "#96002b",
+                    "surface-variant": "#2d3449",
+                    "error-container": "#93000a",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-fixed-variant": "#304f00",
+                    "secondary-fixed-dim": "#7bd0ff",
+                    "surface": "#0b1326"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "container-padding": "20px",
+                    "md": "16px",
+                    "unit": "4px",
+                    "touch-target": "48px",
+                    "sm": "8px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Montserrat"],
+                    "stat-lg": ["Montserrat"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Montserrat"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Montserrat"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "stat-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background border-b border-outline-variant flex justify-between items-center px-container-padding h-touch-target">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="fitness_center">fitness_center</span>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-black text-primary uppercase tracking-tighter">BAKAL BUDDIES</h1>
+</div>
+<a class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-highest transition-colors active:scale-95 duration-200 p-2 rounded-full" data-icon="format_list_bulleted" href="index.html" title="Go to Tracker">format_list_bulleted</a>
+</header>
+<main class="pt-24 px-container-padding max-w-lg mx-auto">
+<!-- Year Selector -->
+<div class="flex justify-between items-center mb-6">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface" id="current-year-display">2026</h2>
+<p class="text-label-md font-label-md text-on-surface-variant">Workouts</p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 bg-surface-container hover:bg-surface-container-highest rounded-full transition-colors active:scale-90" id="prev-year">
+<span class="material-symbols-outlined text-primary">chevron_left</span>
+</button>
+<button class="p-2 bg-surface-container hover:bg-surface-container-highest rounded-full transition-colors active:scale-90" id="next-year">
+<span class="material-symbols-outlined text-primary">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Year Stats -->
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="bg-surface-container rounded-xl p-4 border-l-4 border-primary shadow-lg">
+<p class="text-label-md font-label-md text-on-surface-variant uppercase">Total Days</p>
+<div class="flex items-baseline gap-2">
+<span class="font-stat-lg text-stat-lg text-primary" id="year-total">0</span>
+<span class="text-body-md text-on-surface-variant">Logged</span>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-4 border-l-4 border-secondary shadow-lg">
+<p class="text-label-md font-label-md text-on-surface-variant uppercase">Best Month</p>
+<div class="flex items-baseline gap-2">
+<span class="font-stat-lg text-stat-lg text-secondary" id="best-month">—</span>
+</div>
+</div>
+</div>
+<!-- Color Legend -->
+<div class="flex items-center gap-4 mb-6 px-1 text-[11px] text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-sm" style="background-color:#84cc16;"></span> Workout
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-sm" style="background-color:rgba(255,180,171,0.5);"></span> Missed
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-sm" style="background-color:#1c2438;"></span> Upcoming
+</div>
+</div>
+<!-- 12-Month Grid -->
+<div class="grid grid-cols-3 gap-3" id="year-grid">
+<!-- 12 mini month cards injected by JS -->
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface-container border-t border-outline-variant shadow-lg rounded-t-xl flex justify-around items-center h-20 pb-2">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim active:scale-90 transition-transform" href="index.html">
+<span class="material-symbols-outlined" data-icon="format_list_bulleted">format_list_bulleted</span>
+<span class="font-label-md text-label-md">Tracker</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim active:scale-90 transition-transform" href="calendar.html">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="font-label-md text-label-md">Calendar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold transition-all duration-300 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-label-md text-label-md">Yearly</span>
+</a>
+</nav>
+<script>
+        const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const MONTH_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+        // Shares the SAME storage key as the Tracker page - no separate data, no syncing needed.
+        const STORAGE_KEY = 'ironPulseData';
+
+        let currentYear = new Date().getFullYear();
+
+        function todayKey() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        // Reads every logged exercise (new flat structure, with fallback for the old weeks structure)
+        // and returns a Set of date strings ("YYYY-MM-DD") that have at least one exercise.
+        function getLoggedDateSet() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            const appData = raw ? JSON.parse(raw) : { exercises: [] };
+            const allExercises = appData.exercises || (appData.weeks || []).flatMap(w => w.exercises || []);
+            const set = new Set();
+            allExercises.forEach(ex => { if (ex.date) set.add(ex.date); });
+            return set;
+        }
+
+        // Builds one mini month-grid (7 columns, Mon-start) for a given year+month (0-indexed month)
+        function buildMonthGrid(year, month, loggedDates, todayStr) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const startingPad = firstDay === 0 ? 6 : firstDay - 1; // Mon-start padding
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            let cells = '';
+            for (let i = 0; i < startingPad; i++) {
+                cells += `<div class="mini-cell heat-pad"></div>`;
+            }
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                let cls = 'heat-future';
+                if (loggedDates.has(dateKey)) {
+                    cls = 'heat-done';
+                } else if (dateKey < todayStr) {
+                    cls = 'heat-missed';
+                }
+                cells += `<div class="mini-cell ${cls}" title="${dateKey}"></div>`;
+            }
+            return cells;
+        }
+
+        function renderYear() {
+            document.getElementById('current-year-display').textContent = currentYear;
+
+            const loggedDates = getLoggedDateSet();
+            const todayStr = todayKey();
+            const grid = document.getElementById('year-grid');
+
+            let monthCounts = [];
+            let html = '';
+
+            for (let m = 0; m < 12; m++) {
+                // Count logged days in this month (for stats only, not shown per-cell)
+                const monthPrefix = `${currentYear}-${String(m + 1).padStart(2, '0')}`;
+                const countThisMonth = [...loggedDates].filter(d => d.startsWith(monthPrefix)).length;
+                monthCounts.push(countThisMonth);
+
+                const cellsHtml = buildMonthGrid(currentYear, m, loggedDates, todayStr);
+                html += `
+                    <div class="bg-surface-container-low rounded-xl p-3 border border-outline-variant">
+                        <p class="text-on-surface-variant text-[11px] font-bold uppercase tracking-wide mb-2">${MONTH_SHORT[m]}</p>
+                        <div class="mini-grid">${cellsHtml}</div>
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+
+            // Stats
+            const yearTotal = monthCounts.reduce((a, b) => a + b, 0);
+            document.getElementById('year-total').textContent = yearTotal;
+
+            const maxCount = Math.max(...monthCounts);
+            const bestMonthIndex = monthCounts.indexOf(maxCount);
+            document.getElementById('best-month').textContent = maxCount > 0 ? MONTH_SHORT[bestMonthIndex] : '—';
+        }
+
+        document.getElementById('prev-year').onclick = () => {
+            currentYear--;
+            renderYear();
+        };
+
+        document.getElementById('next-year').onclick = () => {
+            currentYear++;
+            renderYear();
+        };
+
+        // Initial render
+        renderYear();
+    </script>
+</body></html>
