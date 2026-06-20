@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Iron Pulse | Weekly Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#171f33",
+                        "on-secondary-container": "#00374d",
+                        "on-surface-variant": "#c1cab0",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "secondary": "#7bd0ff",
+                        "on-tertiary": "#67001b",
+                        "surface-bright": "#31394d",
+                        "primary-container": "#84cc16",
+                        "background": "#0b1326",
+                        "primary-fixed": "#acf847",
+                        "on-primary": "#1f3700",
+                        "surface-container-lowest": "#060e20",
+                        "on-background": "#dae2fd",
+                        "on-primary-fixed": "#102000",
+                        "surface-container-highest": "#2d3449",
+                        "outline": "#8b947d",
+                        "primary-fixed-dim": "#91db2a",
+                        "on-tertiary-fixed-variant": "#92002a",
+                        "on-error": "#690005",
+                        "secondary-container": "#00a6e0",
+                        "tertiary-container": "#ff9da4",
+                        "surface-tint": "#91db2a",
+                        "tertiary": "#ffc6c8",
+                        "inverse-surface": "#dae2fd",
+                        "outline-variant": "#424936",
+                        "inverse-primary": "#416900",
+                        "surface-container-high": "#222a3d",
+                        "on-surface": "#dae2fd",
+                        "surface-container-low": "#131b2e",
+                        "on-secondary": "#00354a",
+                        "on-tertiary-fixed": "#40000d",
+                        "primary": "#9ee939",
+                        "surface-dim": "#0b1326",
+                        "secondary-fixed": "#c4e7ff",
+                        "inverse-on-surface": "#283044",
+                        "on-secondary-fixed-variant": "#004c69",
+                        "on-primary-container": "#315200",
+                        "on-secondary-fixed": "#001e2c",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed": "#ffdadb",
+                        "on-tertiary-container": "#96002b",
+                        "surface-variant": "#2d3449",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#304f00",
+                        "secondary-fixed-dim": "#7bd0ff",
+                        "surface": "#0b1326"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "container-padding": "20px",
+                        "md": "16px",
+                        "unit": "4px",
+                        "touch-target": "48px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Montserrat"],
+                        "stat-lg": ["Montserrat"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Montserrat"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "stat-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .neon-glow { box-shadow: 0 0 15px rgba(132, 204, 22, 0.2); }
+        .active-ring { outline: 1px solid #84cc16; }
+        input[type="number"]::-webkit-inner-spin-button, 
+        input[type="number"]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; margin: 0; 
+        }
+        body { min-height: max(884px, 100dvh); }
+
+        /* Muscle group chip colors - distinct accent per group, dark base preserved */
+        .grp-chest { background: rgba(255, 138, 101, 0.14); color: #ff8a65; }
+        .grp-back { background: rgba(123, 208, 255, 0.14); color: #7bd0ff; }
+        .grp-legs { background: rgba(158, 233, 57, 0.14); color: #9ee939; }
+        .grp-shoulders { background: rgba(255, 198, 200, 0.16); color: #ffc6c8; }
+        .grp-arms { background: rgba(255, 213, 79, 0.16); color: #ffd54f; }
+        .grp-core { background: rgba(186, 156, 255, 0.16); color: #ba9cff; }
+        .grp-cardio { background: rgba(255, 110, 145, 0.16); color: #ff6e91; }
+
+        .grp-border-chest { border-color: #ff8a65; }
+        .grp-border-back { border-color: #7bd0ff; }
+        .grp-border-legs { border-color: #9ee939; }
+        .grp-border-shoulders { border-color: #ffc6c8; }
+        .grp-border-arms { border-color: #ffd54f; }
+        .grp-border-core { border-color: #ba9cff; }
+        .grp-border-cardio { border-color: #ff6e91; }
+
+        .filter-chip { transition: all 0.15s ease; }
+        .filter-chip[data-active="true"] { box-shadow: 0 0 0 1px currentColor inset; }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+        }
+    </style>
+  </head>
+<body class="font-body-md text-body-md overflow-x-hidden pb-32">
+<!-- Top AppBar -->
+<header class="bg-background fixed top-0 w-full z-50 flex justify-between items-center px-container-padding h-touch-target border-b border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile font-black text-primary uppercase tracking-tighter">IRON PULSE</h1>
+</div>
+<button class="bg-surface-container-highest text-primary px-3 py-2 rounded-xl font-label-md text-label-md flex items-center gap-1 active:scale-95 transition-transform" onclick="jumpToToday()" title="Jump to current week">
+<span class="material-symbols-outlined text-[18px]">today</span>
+        </button>
+</header>
+<main class="mt-20 px-container-padding">
+<!-- Week Selector -->
+<section class="mb-lg">
+<div class="flex gap-md overflow-x-auto no-scrollbar py-2" id="week-selector">
+<!-- Dynamic Week Pills -->
+</div>
+</section>
+<!-- Tracker Header -->
+<section class="flex justify-between items-end mb-md">
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface" id="current-week-display">Week 1</h2>
+<p class="text-on-surface-variant font-label-md text-label-md" id="current-month-display">June 2026</p>
+</div>
+<button class="w-touch-target h-touch-target bg-surface-container-highest text-primary flex items-center justify-center rounded-full hover:bg-primary hover:text-on-primary transition-colors active:scale-90" onclick="openExerciseModal()">
+<span class="material-symbols-outlined">add</span>
+</button>
+</section>
+<!-- Muscle Group Filter -->
+<section class="mb-lg">
+<div class="flex gap-2 overflow-x-auto no-scrollbar py-1" id="group-filter">
+<!-- Dynamic filter chips -->
+</div>
+</section>
+<!-- Exercises List -->
+<section class="space-y-lg" id="exercises-container">
+<!-- Exercise groups generated by JS -->
+</section>
+<!-- Empty State (Fallback) -->
+<div class="hidden flex-col items-center justify-center py-xl opacity-40" id="empty-state">
+<span class="material-symbols-outlined text-[64px] mb-md">format_list_bulleted</span>
+<p class="font-label-md" id="empty-state-text">No exercises added this week</p>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-xl bg-surface-container border-t border-outline-variant shadow-lg flex justify-around items-center h-20 pb-2">
+<a class="flex flex-col items-center justify-center text-primary font-bold transition-all duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">format_list_bulleted</span>
+<span class="font-label-md text-label-md">Tracker</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed-dim active:scale-90 transition-transform" href="calendar.html">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-label-md text-label-md">Calendar</span>
+</a>
+</nav>
+<!-- Add Exercise Modal -->
+<div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-container-padding" id="exercise-modal">
+<div class="bg-surface-container w-full max-w-md rounded-xl p-lg border border-outline-variant shadow-2xl max-h-[90vh] overflow-y-auto no-scrollbar">
+<h3 class="font-headline-md text-headline-md mb-lg text-primary">New Exercise</h3>
+<div class="space-y-md">
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Name</label>
+<input class="w-full bg-background border border-outline-variant rounded-lg p-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" id="modal-name" placeholder="Bench Press" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Muscle Group</label>
+<div class="grid grid-cols-4 gap-2" id="modal-group-grid">
+<!-- Dynamic group buttons -->
+</div>
+<input id="modal-group" type="hidden" value="chest"/>
+</div>
+<div class="grid grid-cols-3 gap-md" id="strength-fields">
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Sets</label>
+<input class="w-full bg-background border border-outline-variant rounded-lg p-3 text-on-surface focus:border-primary outline-none" id="modal-sets" type="number" value="3"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Reps</label>
+<input class="w-full bg-background border border-outline-variant rounded-lg p-3 text-on-surface focus:border-primary outline-none" id="modal-reps" type="number" value="10"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Weight (kg)</label>
+<input class="w-full bg-background border border-outline-variant rounded-lg p-3 text-on-surface focus:border-primary outline-none" id="modal-weight" type="number" value="60"/>
+</div>
+</div>
+<div class="hidden grid grid-cols-2 gap-md" id="cardio-fields">
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Duration (min)</label>
+<input class="w-full bg-background border border-outline-variant rounded-lg p-3 text-on-surface focus:border-primary outline-none" id="modal-duration" oninput="updatePaceDisplay()" type="number" value="30"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Distance (km)</label>
+<input class="w-full bg-background border border-outline-variant rounded-lg p-3 text-on-surface focus:border-primary outline-none" id="modal-distance" oninput="updatePaceDisplay()" step="0.1" type="number" value="5"/>
+</div>
+<div class="col-span-2">
+<label class="block font-label-md text-on-surface-variant mb-xs">Avg Pace</label>
+<p class="w-full bg-surface-container-highest/40 border border-outline-variant rounded-lg p-3 text-on-surface-variant text-sm" id="modal-pace-display">—</p>
+</div>
+</div>
+</div>
+<div class="flex gap-md mt-xl">
+<button class="flex-1 py-3 font-label-md rounded-lg bg-surface-container-highest text-on-surface" onclick="closeExerciseModal()">Cancel</button>
+<button class="flex-1 py-3 font-label-md rounded-lg bg-primary text-on-primary font-bold" id="modal-save-btn" onclick="saveExercise()">Add</button>
+</div>
+</div>
+</div>
+<script>
+        // Muscle group catalog: id -> { label, icon, css class suffix }
+        const MUSCLE_GROUPS = {
+            chest:     { label: "Chest",     icon: "fitness_center" },
+            back:      { label: "Back",      icon: "rows" },
+            legs:      { label: "Legs",      icon: "directions_run" },
+            shoulders: { label: "Shoulders", icon: "sports_gymnastics" },
+            arms:      { label: "Arms",      icon: "sports_martial_arts" },
+            core:      { label: "Core",      icon: "self_improvement" },
+            cardio:    { label: "Cardio",    icon: "monitor_heart" },
+        };
+        const GROUP_ORDER = ["chest", "back", "legs", "shoulders", "arms", "core", "cardio"];
+        const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+        // ---- Data model ----
+        // Exercises now live in ONE flat list, each carrying a real date (YYYY-MM-DD).
+        // "Weeks" are NOT stored - they are derived from those dates, so a week always
+        // means "days 1-7 of this specific month" and naturally restarts every month.
+        let appData = JSON.parse(localStorage.getItem('ironPulseData')) || { exercises: [] };
+
+        // ---- One-time migration from the old { weeks: [...] } structure ----
+        // Old data had weeks like "Week 1", "Week 2"... counting up forever with no
+        // real date attached beyond whatever was on each exercise. We flatten everything
+        // into the new exercises list, keeping each exercise's own date if it has one.
+        if (appData.weeks) {
+            const flat = [];
+            appData.weeks.forEach(w => {
+                (w.exercises || []).forEach(ex => {
+                    flat.push({ ...ex, date: ex.date || todayKey() });
+                });
+            });
+            appData = { exercises: flat };
+            localStorage.setItem('ironPulseData', JSON.stringify(appData));
+        }
+
+        // Migrate any pre-existing exercises that lack a muscle group or date
+        appData.exercises.forEach(ex => {
+            if (!ex.group) ex.group = "chest";
+            if (!ex.date) ex.date = todayKey();
+        });
+
+        function todayKey() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        // Given a YYYY-MM-DD date string, return which "week of the month" it falls in (1-5)
+        // Week 1 = day 1-7, Week 2 = day 8-14, Week 3 = day 15-21, Week 4 = day 22-28, Week 5 = day 29+
+        function weekOfMonth(dateKey) {
+            const day = parseInt(dateKey.split('-')[2], 10);
+            return Math.min(5, Math.floor((day - 1) / 7) + 1);
+        }
+
+        // Returns a stable key for a given week, e.g. "2026-06-W3"
+        function weekKeyFromDate(dateKey) {
+            const [y, m] = dateKey.split('-');
+            return `${y}-${m}-W${weekOfMonth(dateKey)}`;
+        }
+
+        function weekKeyForToday() {
+            return weekKeyFromDate(todayKey());
+        }
+
+        // currentWeekKey is the only piece of "which week am I viewing" state we keep
+        let currentWeekKey = weekKeyForToday();
+
+        // Returns every distinct week key that has at least one exercise, sorted oldest -> newest,
+        // PLUS always includes the current real-world week even if it's empty (so there's
+        // always somewhere to add today's workout).
+        function getAllWeekKeys() {
+            const keys = new Set(appData.exercises.map(ex => weekKeyFromDate(ex.date)));
+            keys.add(weekKeyForToday());
+            return [...keys].sort(); // "2026-06-W3" sorts correctly as a string
+        }
+
+        // Human label for a week key, e.g. "2026-06-W3" -> { weekLabel: "Week 3", monthLabel: "June 2026" }
+        function describeWeekKey(weekKey) {
+            const [y, m, wPart] = weekKey.split('-');
+            const weekNum = wPart.replace('W', '');
+            const monthLabel = `${MONTH_NAMES[parseInt(m, 10) - 1]} ${y}`;
+            return { weekLabel: `Week ${weekNum}`, monthLabel };
+        }
+
+        function exercisesForWeek(weekKey) {
+            return appData.exercises.filter(ex => weekKeyFromDate(ex.date) === weekKey);
+        }
+
+        function formatShortDate(dateKey) {
+            // dateKey is YYYY-MM-DD -> render as e.g. "Jun 20"
+            const [y, m, d] = dateKey.split('-').map(Number);
+            const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            return `${months[m - 1]} ${d}`;
+        }
+
+        let activeFilter = "all";
+        let editingExerciseId = null; // null = adding new
+
+        function saveToStorage() {
+            localStorage.setItem('ironPulseData', JSON.stringify(appData));
+            render();
+        }
+
+        function switchWeek(weekKey) {
+            currentWeekKey = weekKey;
+            activeFilter = "all";
+            render();
+        }
+
+        function jumpToToday() {
+            currentWeekKey = weekKeyForToday();
+            activeFilter = "all";
+            render();
+        }
+
+        function setFilter(groupId) {
+            activeFilter = groupId;
+            render();
+        }
+
+        function openExerciseModal() {
+            editingExerciseId = null;
+            document.getElementById('modal-name').value = '';
+            document.getElementById('modal-sets').value = 3;
+            document.getElementById('modal-reps').value = 10;
+            document.getElementById('modal-weight').value = 60;
+            document.getElementById('modal-duration').value = 30;
+            document.getElementById('modal-distance').value = 5;
+            document.getElementById('modal-group').value = 'chest';
+            document.getElementById('modal-save-btn').innerText = 'Add';
+            renderGroupPicker();
+            toggleFieldsForGroup('chest');
+            document.getElementById('exercise-modal').classList.remove('hidden');
+            document.getElementById('exercise-modal').classList.add('flex');
+        }
+
+        function closeExerciseModal() {
+            document.getElementById('exercise-modal').classList.add('hidden');
+            document.getElementById('exercise-modal').classList.remove('flex');
+        }
+
+        function renderGroupPicker() {
+            const grid = document.getElementById('modal-group-grid');
+            const selected = document.getElementById('modal-group').value;
+            grid.innerHTML = GROUP_ORDER.map(gid => {
+                const g = MUSCLE_GROUPS[gid];
+                const isActive = gid === selected;
+                return `
+                    <button type="button" onclick="pickGroup('${gid}')"
+                        class="flex flex-col items-center justify-center gap-1 py-2 rounded-lg border text-[11px] font-bold transition-colors ${isActive ? `grp-${gid} grp-border-${gid} border` : 'border-outline-variant text-on-surface-variant'}">
+                        <span class="material-symbols-outlined text-[18px]">${g.icon}</span>
+                        ${g.label}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function pickGroup(gid) {
+            document.getElementById('modal-group').value = gid;
+            renderGroupPicker();
+            toggleFieldsForGroup(gid);
+        }
+
+        function toggleFieldsForGroup(gid) {
+            const strengthFields = document.getElementById('strength-fields');
+            const cardioFields = document.getElementById('cardio-fields');
+            if (gid === 'cardio') {
+                strengthFields.classList.add('hidden');
+                cardioFields.classList.remove('hidden');
+                cardioFields.classList.add('grid');
+                updatePaceDisplay();
+            } else {
+                cardioFields.classList.add('hidden');
+                cardioFields.classList.remove('grid');
+                strengthFields.classList.remove('hidden');
+            }
+        }
+
+        function updatePaceDisplay() {
+            const duration = parseFloat(document.getElementById('modal-duration').value) || 0;
+            const distance = parseFloat(document.getElementById('modal-distance').value) || 0;
+            const display = document.getElementById('modal-pace-display');
+            if (duration > 0 && distance > 0) {
+                const paceMinPerKm = duration / distance;
+                const paceMin = Math.floor(paceMinPerKm);
+                const paceSec = Math.round((paceMinPerKm - paceMin) * 60);
+                display.textContent = `${paceMin}:${String(paceSec).padStart(2, '0')} /km`;
+            } else {
+                display.textContent = '—';
+            }
+        }
+
+        function saveExercise() {
+            const name = document.getElementById('modal-name').value.trim();
+            const group = document.getElementById('modal-group').value;
+
+            if (!name) return alert('Enter exercise name');
+
+            const isCardio = group === 'cardio';
+
+            // Build a clean payload depending on the activity type, so a cardio entry
+            // never carries leftover sets/reps/weight, and vice versa.
+            let payload = { name, group };
+            if (isCardio) {
+                const duration = document.getElementById('modal-duration').value;
+                const distance = document.getElementById('modal-distance').value;
+                payload.duration = duration;
+                payload.distance = distance;
+            } else {
+                payload.sets = document.getElementById('modal-sets').value;
+                payload.reps = document.getElementById('modal-reps').value;
+                payload.weight = document.getElementById('modal-weight').value;
+            }
+
+            if (editingExerciseId) {
+                const ex = appData.exercises.find(e => e.id === editingExerciseId);
+                // Wipe the old field set before applying the new one (e.g. switching strength -> cardio)
+                delete ex.sets; delete ex.reps; delete ex.weight; delete ex.duration; delete ex.distance;
+                Object.assign(ex, payload);
+                // date is intentionally left untouched on edit - editing a set shouldn't move the calendar mark
+            } else {
+                // New exercises are dated using today's date if you're viewing the current week,
+                // or a representative date inside whichever past/future week you're viewing -
+                // this way adding an exercise always lands in the week you're actually looking at.
+                const logDate = (currentWeekKey === weekKeyForToday()) ? todayKey() : firstDateOfWeek(currentWeekKey);
+                appData.exercises.push({
+                    id: Date.now(),
+                    date: logDate, // YYYY-MM-DD, used by the Calendar page to mark this day
+                    ...payload
+                });
+            }
+
+            closeExerciseModal();
+            saveToStorage();
+        }
+
+        // Given a week key like "2026-06-W3", return a real YYYY-MM-DD date that falls inside it
+        // (the first day of that week-of-month bucket).
+        function firstDateOfWeek(weekKey) {
+            const [y, m, wPart] = weekKey.split('-');
+            const weekNum = parseInt(wPart.replace('W', ''), 10);
+            const day = (weekNum - 1) * 7 + 1;
+            return `${y}-${m}-${String(day).padStart(2, '0')}`;
+        }
+
+        function deleteExercise(id) {
+            appData.exercises = appData.exercises.filter(ex => ex.id !== id);
+            saveToStorage();
+        }
+
+
+        function getPrevWeekExercise(exerciseName) {
+            const allWeekKeys = getAllWeekKeys();
+            const currentIndex = allWeekKeys.indexOf(currentWeekKey);
+            if (currentIndex <= 0) return null;
+
+            const prevWeekKey = allWeekKeys[currentIndex - 1];
+            const prevWeekExercises = exercisesForWeek(prevWeekKey);
+            return prevWeekExercises.find(ex => ex.name.toLowerCase() === exerciseName.toLowerCase()) || null;
+        }
+
+        function calcPace(duration, distance) {
+            const d = parseFloat(duration), dist = parseFloat(distance);
+            if (!d || !dist) return '—';
+            const paceMinPerKm = d / dist;
+            const paceMin = Math.floor(paceMinPerKm);
+            const paceSec = Math.round((paceMinPerKm - paceMin) * 60);
+            return `${paceMin}:${String(paceSec).padStart(2, '0')}/km`;
+        }
+
+        function exerciseCard(ex) {
+            const isCardio = ex.group === 'cardio';
+            const g = MUSCLE_GROUPS[ex.group] || MUSCLE_GROUPS.chest;
+            const prevEx = getPrevWeekExercise(ex.name);
+
+            // Strength progress: compare weight. Cardio progress: compare distance (more distance = improvement).
+            let diff = null;
+            if (prevEx) {
+                diff = isCardio ? (ex.distance - prevEx.distance) : (ex.weight - prevEx.weight);
+            }
+            const diffClass = diff > 0 ? 'text-primary' : (diff < 0 ? 'text-error' : 'text-on-surface-variant');
+            const diffIcon = diff > 0 ? 'trending_up' : (diff < 0 ? 'trending_down' : 'flatware');
+            const diffUnit = isCardio ? 'km' : 'kg';
+
+            const statGrid = isCardio ? `
+                <div class="grid grid-cols-3 gap-md items-center">
+                    <div class="bg-surface-container-highest rounded-lg p-2 text-center">
+                        <p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Duration</p>
+                        <p class="font-headline-md text-primary">${ex.duration}<span class="text-label-md">min</span></p>
+                    </div>
+                    <div class="bg-surface-container-highest rounded-lg p-2 text-center relative overflow-hidden">
+                        <p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Distance</p>
+                        <div class="flex items-center justify-center gap-1">
+                            <span class="font-headline-md text-primary">${ex.distance}</span>
+                            <span class="text-label-md font-bold text-primary">km</span>
+                        </div>
+                        ${diff !== null ? `
+                        <div class="absolute top-1 right-2 flex items-center ${diffClass} text-[10px] font-black">
+                            <span class="material-symbols-outlined text-[12px]">${diffIcon}</span>
+                            ${diff > 0 ? '+' : ''}${diff.toFixed(1)}
+                        </div>
+                        ` : ''}
+                    </div>
+                    <div class="bg-surface-container-highest rounded-lg p-2 text-center">
+                        <p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Pace</p>
+                        <p class="font-headline-md text-primary text-sm">${calcPace(ex.duration, ex.distance)}</p>
+                    </div>
+                </div>
+            ` : `
+                <div class="grid grid-cols-3 gap-md items-center">
+                    <div class="bg-surface-container-highest rounded-lg p-2 text-center">
+                        <p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Sets</p>
+                        <p class="font-headline-md text-primary">${ex.sets}</p>
+                    </div>
+                    <div class="bg-surface-container-highest rounded-lg p-2 text-center">
+                        <p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Reps</p>
+                        <p class="font-headline-md text-primary">${ex.reps}</p>
+                    </div>
+                    <div class="bg-surface-container-highest rounded-lg p-2 text-center relative overflow-hidden">
+                        <p class="text-[10px] uppercase font-bold text-on-surface-variant mb-1">Weight</p>
+                        <div class="flex items-center justify-center gap-1">
+                            <span class="font-headline-md text-primary">${ex.weight}</span>
+                            <span class="text-label-md font-bold text-primary">kg</span>
+                        </div>
+                        ${diff !== null ? `
+                        <div class="absolute top-1 right-2 flex items-center ${diffClass} text-[10px] font-black">
+                            <span class="material-symbols-outlined text-[12px]">${diffIcon}</span>
+                            ${diff > 0 ? '+' : ''}${diff}
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+
+            const prevSummary = prevEx
+                ? (isCardio ? `<span class="text-xs">Prev: ${prevEx.distance}km</span>` : `<span class="text-xs">Prev: ${prevEx.weight}kg</span>`)
+                : '';
+
+            return `
+            <div class="bg-surface-container-low border-t-2 grp-border-${ex.group} rounded-xl p-md shadow-sm active:scale-[0.98] transition-transform">
+                <div class="flex justify-between items-start mb-sm">
+                    <div>
+                        <h4 class="font-headline-md text-headline-md text-on-surface">${ex.name}</h4>
+                        <div class="flex gap-2 items-center text-on-surface-variant mt-1">
+                            <span class="grp-${ex.group} px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[12px]">${g.icon}</span>
+                                ${g.label}
+                            </span>
+                            <span class="text-xs">${formatShortDate(ex.date)}</span>
+                            ${prevSummary}
+                        </div>
+                    </div>
+                    <div class="flex gap-1">
+                        <button onclick='openEditModal(${ex.id})' class="text-on-surface-variant hover:text-primary transition-colors p-1">
+                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                        </button>
+                        <button onclick="deleteExercise(${ex.id})" class="text-on-surface-variant hover:text-error transition-colors p-1">
+                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                        </button>
+                    </div>
+                </div>
+                ${statGrid}
+            </div>
+            `;
+        }
+
+        function openEditModal(id) {
+            const ex = appData.exercises.find(e => e.id === id);
+            if (!ex) return;
+            editingExerciseId = id;
+            document.getElementById('modal-name').value = ex.name;
+            document.getElementById('modal-group').value = ex.group;
+            document.getElementById('modal-save-btn').innerText = 'Save';
+
+            if (ex.group === 'cardio') {
+                document.getElementById('modal-duration').value = ex.duration || 30;
+                document.getElementById('modal-distance').value = ex.distance || 5;
+            } else {
+                document.getElementById('modal-sets').value = ex.sets || 3;
+                document.getElementById('modal-reps').value = ex.reps || 10;
+                document.getElementById('modal-weight').value = ex.weight || 60;
+            }
+
+            renderGroupPicker();
+            toggleFieldsForGroup(ex.group);
+            document.getElementById('exercise-modal').classList.remove('hidden');
+            document.getElementById('exercise-modal').classList.add('flex');
+        }
+
+        function render() {
+            // Render Week Selector - one pill per real week that has data, plus the current week
+            const weekSelector = document.getElementById('week-selector');
+            const allWeekKeys = getAllWeekKeys();
+            weekSelector.innerHTML = allWeekKeys.map(wk => {
+                const { weekLabel, monthLabel } = describeWeekKey(wk);
+                const shortMonth = monthLabel.split(' ')[0].slice(0, 3); // "June 2026" -> "Jun"
+                const isActive = wk === currentWeekKey;
+                return `
+                <button onclick="switchWeek('${wk}')" class="flex-shrink-0 px-5 py-2 rounded-full font-label-md whitespace-nowrap transition-all duration-200 flex flex-col items-center leading-none ${isActive ? 'bg-primary text-on-primary font-bold shadow-[0_0_10px_rgba(132,204,22,0.4)]' : 'bg-surface-container-high text-on-surface-variant'}">
+                    <span>${weekLabel}</span>
+                    <span class="text-[9px] opacity-80 uppercase tracking-wide">${shortMonth}</span>
+                </button>`;
+            }).join('');
+
+            // Scroll the active week pill into view so older/future weeks don't get lost off-screen
+            requestAnimationFrame(() => {
+                const activeBtn = weekSelector.querySelector('button.bg-primary');
+                if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            });
+
+            // Render Current Week Title ("Week 3" / "June 2026")
+            const { weekLabel, monthLabel } = describeWeekKey(currentWeekKey);
+            document.getElementById('current-week-display').innerText = weekLabel;
+            document.getElementById('current-month-display').innerText = monthLabel;
+
+            const weekExercises = exercisesForWeek(currentWeekKey);
+
+            // Render Muscle Group Filter Chips (only show groups present this week, plus "All")
+            const groupFilter = document.getElementById('group-filter');
+            const groupsPresent = [...new Set(weekExercises.map(e => e.group))];
+            if (groupsPresent.length === 0) {
+                groupFilter.innerHTML = '';
+            } else {
+                const allChip = `
+                    <button onclick="setFilter('all')" data-active="${activeFilter === 'all'}" class="filter-chip flex-shrink-0 px-4 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-wide whitespace-nowrap ${activeFilter === 'all' ? 'bg-primary text-on-primary' : 'bg-surface-container-high text-on-surface-variant'}">
+                        All
+                    </button>`;
+                const groupChips = GROUP_ORDER.filter(g => groupsPresent.includes(g)).map(gid => {
+                    const g = MUSCLE_GROUPS[gid];
+                    return `
+                        <button onclick="setFilter('${gid}')" data-active="${activeFilter === gid}" class="filter-chip flex-shrink-0 px-4 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-wide whitespace-nowrap flex items-center gap-1 grp-${gid}">
+                            <span class="material-symbols-outlined text-[14px]">${g.icon}</span>
+                            ${g.label}
+                        </button>`;
+                }).join('');
+                groupFilter.innerHTML = allChip + groupChips;
+            }
+
+            // Render Exercises (filtered, grouped by muscle group for scannability)
+            const container = document.getElementById('exercises-container');
+            const emptyState = document.getElementById('empty-state');
+
+            const visibleExercises = activeFilter === 'all'
+                ? weekExercises
+                : weekExercises.filter(e => e.group === activeFilter);
+
+            if (weekExercises.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                document.getElementById('empty-state-text').innerText = 'No exercises added this week';
+            } else if (visibleExercises.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                document.getElementById('empty-state-text').innerText = 'No exercises in this muscle group';
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+
+                if (activeFilter !== 'all') {
+                    container.innerHTML = visibleExercises.map(exerciseCard).join('');
+                } else {
+                    // Group by muscle group, in GROUP_ORDER, with section headers
+                    const byGroup = {};
+                    visibleExercises.forEach(ex => {
+                        (byGroup[ex.group] = byGroup[ex.group] || []).push(ex);
+                    });
+                    container.innerHTML = GROUP_ORDER.filter(g => byGroup[g]).map(gid => {
+                        const g = MUSCLE_GROUPS[gid];
+                        return `
+                            <div>
+                                <div class="flex items-center gap-2 mb-sm px-1">
+                                    <span class="material-symbols-outlined text-[16px] grp-${gid} rounded p-1">${g.icon}</span>
+                                    <span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wide">${g.label}</span>
+                                    <span class="text-on-surface-variant text-[11px]">(${byGroup[gid].length})</span>
+                                </div>
+                                <div class="space-y-md">
+                                    ${byGroup[gid].map(exerciseCard).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        // Initial Run
+        render();
+
+        // Cosmetic: Add scroll padding for mobile Safari
+        window.scrollTo(0, 0);
+    </script>
+</body></html>
